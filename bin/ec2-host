@@ -41,7 +41,7 @@ def ec2_active_instances(label_tag, filters):
         for instance in reservation.instances:
             instance_name = instance.tags.get(label_tag)
             if instance.public_dns_name:
-                pair = (instance_name, instance.public_dns_name)
+                pair = (instance.id, instance_name, instance.public_dns_name)
                 instances.append(pair)
     return instances
 
@@ -109,13 +109,13 @@ def main(argv):
     numinstances = len(instances)
 
     if numinstances == 1:
-        print instances[0][1]  # [1] = dns
+        print "%s\t%s" % (instances[0][0], instances[0][2])
 
         sys.exit(0)
         return
     elif numinstances == 0 or numinstances > 1:
         for pair in sorted(instances, key=lambda p: p[0]):
-            print "%s\t%s" % pair
+            print "%s\t%-20s\t%s" % pair
 
         sys.exit(0)
         return

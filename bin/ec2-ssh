@@ -43,7 +43,7 @@ user="${hostparts[0]}"
 
 if [ -z "$inst" ]; then
   inst="$1"
-  user="ubuntu"
+  user="ec2-user"
 fi
 
 # support tag:value format for identifying instances
@@ -59,7 +59,9 @@ else
 fi
 
 # get host from ec2-host command
-host=$(eval "$cmd $inst")
+p=$(eval "$cmd $inst")
+IFS=$' \t\n'; declare -a t=($p)
+host="${t[1]}"
 
 # pass all other parameters (${@:2}) to ssh allowing
 # things like: ec2-ssh nginx uptime
